@@ -1,13 +1,17 @@
 '''
 Created on Aug 15, 2011
+Hacked on Sep 16, 2012
 
 @author: tomkent
+@hacker: joshuascottpaul
 '''
 
 import urllib2
 import time
 import optparse
 import monotonic
+from datetime import datetime
+
 
 def push_block_size(remote_file, block_size, block_window=1.0, telemetry=False):
     """ Grow the blocksize to a suitable value for this connection
@@ -93,8 +97,8 @@ def speed_check_info(remote_file, test_seconds, block_size, output_time=0):
 if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option('-u','--url', help="URL of the file to try downloading"+
-        "defaults to http://speedtest.wdc01.softlayer.com/downloads/test500.zip",
-        default="http://speedtest.wdc01.softlayer.com/downloads/test500.zip")
+        "defaults to http://speedtest.wdc01.softlayer.com/downloads/test10.zip",
+        default="http://speedtest.wdc01.softlayer.com/downloads/test10.zip")
     parser.add_option('-t','--time', help="Number of seconds to run the test, default 60",
         default=60, type=float)
     parser.add_option('-m','--message-freq', help="Output message frequency in seconds",
@@ -114,13 +118,14 @@ if __name__ == '__main__':
     average = speed_check(f, args.time, block_size, args.message_freq)
     f.close()
     
+    
     if args.print_result: 
-        #print "Average: " + str(average) + " KB/s"
-        print average
+        print  str(datetime.now()) + " "  + args.url + " Average: " + str(round(average / 1024,0)) + " KB/s"
+        #print average
      
     if args.append_file:
         out = open(args.append_file,'a')
-        out.write(str(average)+'\n')
+        out.write( str(datetime.now()) + " "  + args.url + " Average: " + str(round(average / 1024,0)) + " KB/s \n")
         out.close()
     
     
